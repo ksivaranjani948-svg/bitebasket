@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
   <meta charset="UTF-8">
@@ -42,9 +43,39 @@
 
   </section>
 
-  <script>
+  <script type="module">
 
-    const orders = JSON.parse(localStorage.getItem('orders')) || []
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+    import {
+      getFirestore,
+      collection,
+      getDocs
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    // FIREBASE CONFIG
+
+    const firebaseConfig = {
+
+      apiKey: "AIzaSyA2NhmB-i3W5nLA62b4xJ_kKYmfHpxa508",
+
+      authDomain: "bitebasket-925a7.firebaseapp.com",
+
+      projectId: "bitebasket-925a7",
+
+      storageBucket: "bitebasket-925a7.firebasestorage.app",
+
+      messagingSenderId: "275401126053",
+
+      appId: "1:275401126053:web:057d5e1197c2da60329d4c"
+
+    };
+
+    // INITIALIZE FIREBASE
+
+    const app = initializeApp(firebaseConfig);
+
+    const db = getFirestore(app);
 
     const ordersList = document.getElementById('orders-list')
 
@@ -52,31 +83,42 @@
 
     let total = 0
 
-    orders.forEach((order)=>{
+    async function loadOrders(){
 
-      total += order.price
+      const querySnapshot = await getDocs(collection(db,"orders"))
 
-      ordersList.innerHTML += `
+      querySnapshot.forEach((doc)=>{
 
-        <div class="cart-item">
+        const order = doc.data()
 
-          <h3>${order.name}</h3>
+        total += order.price
 
-          <p>Sold Price: ₹${order.price}</p>
+        ordersList.innerHTML += `
 
-<p>Date: ${order.date}</p>
+          <div class="cart-item">
 
-<p>Time: ${order.time}</p>
+            <h3>${order.name}</h3>
 
-        </div>
+            <p>Sold Price: ₹${order.price}</p>
 
-      `
+            <p>Date: ${order.date}</p>
 
-    })
+            <p>Time: ${order.time}</p>
 
-    salesTotal.innerText = total
+          </div>
+
+        `
+
+      })
+
+      salesTotal.innerText = total
+
+    }
+
+    loadOrders()
 
   </script>
 
 </body>
+
 </html>
