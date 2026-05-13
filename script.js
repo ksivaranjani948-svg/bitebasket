@@ -1,14 +1,40 @@
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+  getFirestore,
+  collection,
+  addDoc
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+// FIREBASE CONFIG
+
+const firebaseConfig = {
+
+  apiKey: "AIzaSyA2NhmB-i3W5nLA62b4xJ_kKYmfHpxa508",
+
+  authDomain: "bitebasket-925a7.firebaseapp.com",
+
+  projectId: "bitebasket-925a7",
+
+  storageBucket: "bitebasket-925a7.firebasestorage.app",
+
+  messagingSenderId: "275401126053",
+
+  appId: "1:275401126053:web:057d5e1197c2da60329d4c"
+
+};
+
+// INITIALIZE FIREBASE
+
+const app = initializeApp(firebaseConfig);
+
+const db = getFirestore(app);
+
+// CART
+
 let cart = []
 
-function scrollProducts(){
-
-  document.getElementById('products').scrollIntoView({
-    behavior:'smooth'
-  })
-
-}
-
-function addToCart(name,price){
+window.addToCart = function(name,price){
 
   cart.push({
     name:name,
@@ -36,11 +62,11 @@ function updateCart(){
     total += item.price
 
     cartItems.innerHTML += `
-    
+
       <div class="cart-item">
-      
+
         <h3>${item.name}</h3>
-        
+
         <p>Price: ₹${item.price}</p>
 
       </div>
@@ -55,7 +81,9 @@ function updateCart(){
 
 }
 
-function checkout(){
+// CHECKOUT
+
+window.checkout = async function(){
 
   if(cart.length === 0){
 
@@ -65,52 +93,44 @@ function checkout(){
 
   }
 
-  // GET OLD ORDERS
+  const now = new Date()
 
-  let orders = JSON.parse(localStorage.getItem('orders')) || []
+  const date = now.toLocaleDateString()
 
-  // ADD NEW ORDERS
+  const time = now.toLocaleTimeString()
 
-  orders.push(...cart)
+  try{
 
-  // SAVE AGAIN
+    for(const item of cart){
 
-  localStorage.setItem('orders',JSON.stringify(orders))
+      await addDoc(collection(db,"orders"),{
 
-  alert('🎉 Order placed successfully!')
+        name:item.name,
 
-  cart = []
+        price:item.price,
 
-  updateCart()
+        date:date,
 
-  showOrders()
+        time:time
 
-}
+      })
 
-function showOrders(){
+    }
 
-  const ordersContainer = document.getElementById('orders-list')
+    alert('🎉 Order placed successfully!')
 
-  const orders = JSON.parse(localStorage.getItem('orders')) || []
+    cart = []
 
-  ordersContainer.innerHTML = ''
+    updateCart()
 
-  orders.forEach((order)=>{
+  }
 
-    ordersContainer.innerHTML += `
+  catch(error){
 
-      <div class="cart-item">
+    console.log(error)
 
-        <h3>${order.name}</h3>
+    alert('Order failed')
 
-        <p>Sold Price: ₹${order.price}</p>
-
-      </div>
-
-    `
-
-  })
+  }
 
 }
-
-window.onload = showOrders
