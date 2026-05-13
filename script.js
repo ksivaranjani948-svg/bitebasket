@@ -124,7 +124,11 @@ window.checkout = async function(){
 
     }
 
-    alert('🎉 Order placed successfully!')
+   console.log("Saving order to Firebase...")
+
+alert('🎉 Order placed successfully!')
+
+location.reload()
 
 // CLEAR CART ARRAY
 
@@ -142,11 +146,13 @@ document.getElementById('total-price').innerText = 0
 
  catch(error){
 
-  console.log(error)
+  console.error("FIREBASE ERROR:", error)
 
-  alert(error.message)
+  alert("Firebase Error: " + error.message)
 
 }
-  }
+
+}
+  
 
 
