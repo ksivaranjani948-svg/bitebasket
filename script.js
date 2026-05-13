@@ -140,12 +140,13 @@ document.getElementById('total-price').innerText = 0
 
   }
 
-  catch(error){
+ catch(error){
 
-    console.log(error)
+  console.log(error)
 
-    alert('Order failed')
-
-  }
+  alert(error.message)
 
 }
+  }
+
+
