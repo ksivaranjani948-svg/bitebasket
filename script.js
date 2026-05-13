@@ -33,6 +33,13 @@ const db = getFirestore(app);
 // CART
 
 let cart = []
+window.scrollProducts = function(){
+
+  document.getElementById('products').scrollIntoView({
+    behavior:'smooth'
+  })
+
+}
 
 window.addToCart = function(name,price){
 
@@ -119,9 +126,17 @@ window.checkout = async function(){
 
     alert('🎉 Order placed successfully!')
 
-    cart = []
+// CLEAR CART ARRAY
 
-    updateCart()
+cart = []
+
+// CLEAR HTML
+
+document.getElementById('cart-items').innerHTML = ''
+
+document.getElementById('cart-count').innerText = 0
+
+document.getElementById('total-price').innerText = 0
 
   }
 
