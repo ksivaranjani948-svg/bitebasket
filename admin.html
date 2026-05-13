@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Owner Dashboard</title>
+
+  <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+  <header>
+
+    <h1>Sales Dashboard</h1>
+
+  </header>
+
+  <section class="cart-section">
+
+    <div class="title">
+
+      <h2>Customer Orders</h2>
+
+      <p>Private owner dashboard</p>
+
+    </div>
+
+    <div id="orders-list"></div>
+
+    <div class="total-box">
+
+      <h3>
+        Total Sales:
+        ₹<span id="sales-total">0</span>
+      </h3>
+
+    </div>
+
+  </section>
+
+  <script>
+
+    const orders = JSON.parse(localStorage.getItem('orders')) || []
+
+    const ordersList = document.getElementById('orders-list')
+
+    const salesTotal = document.getElementById('sales-total')
+
+    let total = 0
+
+    orders.forEach((order)=>{
+
+      total += order.price
+
+      ordersList.innerHTML += `
+
+        <div class="cart-item">
+
+          <h3>${order.name}</h3>
+
+          <p>Sold Price: ₹${order.price}</p>
+
+        </div>
+
+      `
+
+    })
+
+    salesTotal.innerText = total
+
+  </script>
+
+</body>
+</html>
